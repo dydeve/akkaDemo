@@ -47,4 +47,4 @@ Akka 对于 Actor 模型的重要贡献之一就是`位置透明性`的概念:�
 
 Akka 添加了远程处理以及位置透明性，使得一个 Actor 的邮箱可以在远程机器上，而 Akka 会对网络上的消息传输进行抽象封装。
 
-Akka也实现了`reactive stream``，支持用于异步处理的`非阻塞背压`(Back-Pressure)
+Akka也实现了`reactive stream`，支持用于异步处理的`非阻塞背压`(Back-Pressure)
