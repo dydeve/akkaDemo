@@ -1,15 +1,23 @@
 package chapter02.example
 
-import akka.actor.Actor
-import akka.actor.Status
+import akka.actor.{Actor, Props, Status}
 
 /**
   * @Description:
   * @Date 上午1:57 2019/1/8
   * @Author: joker
   */
+object ScalaPongActor {
+  def props = Props(classOf[ScalaPongActor])
+}
+
 class ScalaPongActor extends Actor {
 
+  /**
+    * 将actor封装起来，提供引用，向Actor发送消息并接收响应
+    * val actor = system.actorOf(Props(classOf[ScalaPongActor]))
+    * system.actorOf(Props(new ScalaPongActor))
+    */
   override def receive: Receive = {
     case "ping" =>
       //just return unit

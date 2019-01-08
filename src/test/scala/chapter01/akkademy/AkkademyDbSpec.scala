@@ -1,6 +1,6 @@
 package chapter01.akkademy
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ActorSystem}
 import akka.testkit.TestActorRef
 import akka.util.Timeout
 import org.scalatest.{FunSpecLike, Matchers}
