@@ -61,7 +61,7 @@ class AkkademyDb extends Actor with ActorLogging {
 object Main extends App {
 
   //读取配置文件
-  val system = ActorSystem("akkademy", ConfigFactory.load("application02.conf"))//"application.conf" 默认的，会被其他system读走，改名字
+  val system = ActorSystem("akkademy", ConfigFactory.load("cache.conf"))//"application.conf" 默认的，会被其他system读走，改名字
 
   val actor = system.actorOf(Props[AkkademyDb], "db")
 

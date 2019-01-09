@@ -108,5 +108,12 @@
         </dependency>
 
 
+        <!--文章解析-->
+        <dependency>
+            <groupId>com.syncthemall</groupId>
+            <artifactId>boilerpipe</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+
     </dependencies>
 </project>

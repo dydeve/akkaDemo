@@ -16,6 +16,7 @@ import scala.concurrent.Future
   * [akka.remote.Remoting] Remoting now listens on addresses: [akka.tcp://localSystem@127.0.0.1:2552]
   */
 class Client(remoteAddress: String) {
+  //todo 安全机制，server不能接受任意client
   private implicit val timeout = Timeout(2 second)
   private implicit val system = ActorSystem("localSystem", ConfigFactory.load("client.conf"))//2552
 
