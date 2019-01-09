@@ -77,6 +77,8 @@ class ScalaAskExamplesTest extends FunSpecLike with Matchers {
       })
       val c = Await.result(f, 1 second)
       c should equal("Pong")
+
+      //val listOfFutures: List[Future[String]] = List("Pong", "Pong", "failed").map(x => askPong(x))
     }
 
     it("should effect on failure") {

@@ -56,7 +56,22 @@ class ReverseStringSpec extends FunSpec with Matchers {
       }
     }
 
-    it("Sequence") {
+    it("Future Sequence") {
+      val requestList = List("123", "456", "789", 123)
+      val expectRespondList = List("123".reverse, "456".reverse, "789".reverse, "sorry")
+      //val futurelist:List[Any => Future[Any]] = requestList.map(_ => reverseActor ? _)
+      val futurelist:List[Future[Any]] = requestList.map(x => reverseActor ? x)
+      /*val responseList: Future[List[String]] =
+        Future.sequence(futurelist).mapTo[String]
+          .recover({
+            case e: Exception => "sorry"
+          })*/
+      val respondFuture: Future[List[String]] = Future.sequence(
+        futurelist.map(future => future.mapTo[String].recover{case e: Exception => "sorry"})
+      )
+
+      Await.result(respondFuture, 1 second) should equal(expectRespondList)
+
 
     }
   }
