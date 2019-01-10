@@ -142,7 +142,74 @@ Actor 能够`安全地存储状态`，它允许我们使用`无锁`的方式并�
     热交换(Hotswap):become()和 unbecome()
     有限自动机
 
+##### 4.3.1 在线/离线状态
+###### 转移状态
+###### 在状态之间暂存消息(stash)
+Actor 也经常会处在一个`无法处理某些消息`的状态。如果数据库客户端离线了，那么在重新上线之前，它都无法处理任何消息。我们可以选择`不断重新建立客户端的连接`，直到连接成功为止。在这种情况下，在成功连接之前，客户端会丢弃收到的所有消息。另一种做法是把客户端无法处理的消息`先放在一旁`，等到客户端`恢复连接状态之后再做处理`。
 
+Akka 提供了一种叫做 `stash` 的机制来支持这一功能。stash 消息会把消息暂存到一个`独立的队列`中，该队列中存储目前无法处理的消息.
+`unstash`则把消息`从暂存队列中取出`，`放回邮箱队列`中，Actor 就能继续处理这些消息了。
+
+    NOTICE:
+    要注意的是，虽然 stash() 和 unstash()在希望快速改变状态的时候使用起来非常方便，但是 stash 消息的状态一定要和某个时间限制进行绑定，否则就有可能填满邮箱。
+##### 4.3.2 条件语句
+```scala
+var online = false
+def receive = {
+  case x: GetRequest =>
+    if(online)
+      processMessage(x)
+    else
+      stash()
+  case _: Connected =>
+    online = true
+    unstash()
+  case _: Disconnected =>
+    online = false
+}
+```
+
+##### 4.3.3 热交换(Hotswap):Become/Unbecome
+ Actor 的 context()中，有两个方法
+    
+    become(PartialFunction behavior):这个方法将 receive 块中定义的行为修改为一个新的 PartialFunction。
+    unbecome():这个方法将 Actor 的行为修改回默认行为
+代码示例:
+```scala
+def receive = {
+  case x: GetRequest =>
+    stash()
+  case _: Connected =>
+    become(online)
+    unstash() 
+}
+def online: Receive = {
+  case x: GetRequest =>
+    processMessage(x)
+  case _: Disconnected =>
+    unbecome() 
+}
+```
+相较于条件语句,这种写法可读性更高,更优雅
+
+我们可以定义任意数量的 receive 块，并相互切换。热交换基本上可以处理 Actor 的任何行为修改。
+
+###### stash 泄露
+如果要花很长时间才能接收到 Connected 消息，或者压根就收不到 Connected 消息，那么 Actor 就会不断地 stash 消息，最终导致应用程序`内存耗尽`，或者导致邮箱开始`丢弃消息`
+无论何时，只要使用了 stash()， 都最好设置一个限制，指定最长多少时间或者最多接收到多少消息后就不能再 stash
+
+###### 有限自动机(Finite State Machine，FSM)
+FSM 中也有状态以及基于状态的行为变化。跟热交换比起来，FSM 是一个更重量级的抽象概念，需要更多的代码和类型才能够实现并运行。所以通常来说，热交换是一个更简单、可读性更高的选择。
+
+###### 定义状态
+自己定义状态
+    Disconnected:离线，队列中没有任何消息
+    Disconnected and Pending:离线，队列中包含消息
+    Connected:在线，队列中没有消息
+    Connected and Pending:在线，队列包含消息
+
+###### 定义状态容器
+状态容器就是`存储消息`的地方。FSM 允许我们定义状态容器，并且在切换状态时修改状态容器。
 
 
 
