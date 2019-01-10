@@ -48,7 +48,7 @@ Scala中使用`case class`代替class。推荐使用case class是因为它会自
     - Ask 的额外性能开销
       首先，ask 会导致 Akka 在/temp 路径下新建一个临时 Actor。这个临时 Actor 会等待从接收 ask 消息的 Actor 返回 的响应。其次，Future 也有额外的性能开销。Ask 会创建 Future，由临时 Actor 负责完成。 这个开销并不大，但是如果需要非常高频地执行 ask 操作，那么还是要将这一开销考虑 在内的。Ask 很简单，不过考虑到性能，使用 tell 是更高效的解决方案
 
-      ##### 3.2.3 tell
+##### 3.2.3 tell
 
 `Tell`通常被看做是一种`fire and forget` 消息传递机制，无需指定发送者。不过通过一些巧妙的方法，也可以使用 tell 来完成`request/reply`风格的消息传递 
 
@@ -58,5 +58,25 @@ Scala中使用`case class`代替class。推荐使用case class是因为它会自
 
 ![akka-tell-design](../../resources/chapter03/akka-tell-design.jpg)
 
+##### 3.2.4 forward
+Tell 在语义上是用于将一条消息发送至另一个 Actor，并将响应地址设置为当前的 Actor。而 Forward 和邮件转发非常类似:初始发送者保持不变，只不过新增了一个收件人。
+在使用 tell 时，我们指定了一个响应地址，或是将响应地址隐式设为发送消息的 Actor。而使用 forward 传递消息时，响应地址就是原始消息的发送者.
+
+```scala
+def forward(message: Any)(implicit context: ActorContext) = tell(message, context.sender())
+```
 
 
+
+![akka-forward](../../resources/chapter03/akka-forward.jpg)
+
+
+
+##### 3.2.5 Pipe
+
+```
+future pipeTo sender()
+pipe(future) to sender()
+```
+
+pipe 接受 Future 的结果作为参数，然后将其传递给所提供的 Actor 引用 

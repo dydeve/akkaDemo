@@ -33,7 +33,7 @@ class AskDemoArticleParser(cacheActorPath: String,
 
       /**
         * 匿名函数是在一个不同的线程中执行的，有着不同的 执行上下文，因此在匿名函数中的代码块里调用 sender()方法时，返回值是不可预知的
-        * 更好的办法可以处理这个问题，叫做Pipe
+        * 有更好的办法可以处理这个问题，叫做Pipe
         */
       //sender ref needed for closure,need to use in callback (see Pipe pattern for better solution)
       val senderRef = sender()
