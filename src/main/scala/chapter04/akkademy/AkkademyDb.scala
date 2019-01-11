@@ -16,7 +16,7 @@ object Main extends App {
 
 class AkkademyDb extends Actor with ActorLogging {
 
-  private val map = mutable.Map.empty[String, Object]
+  val map = mutable.Map.empty[String, Object]
 
   override def receive: Receive = {
     /*case "Ping" =>
