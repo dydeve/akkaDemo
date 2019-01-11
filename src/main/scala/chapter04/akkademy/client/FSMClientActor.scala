@@ -52,6 +52,9 @@ class FSMClientActor(address: String) extends FSM[State, RequestQueue] {
       //1.转在线+有内容状态
       //2.添加到队列中
       goto(ConnectedAndPending) using container :+ x
+      //add by myself
+    /*case Event(DisConnected, container: RequestQueue) =>
+      goto(DisConnected) using container*/
   }
 
   when(ConnectedAndPending) {

@@ -98,7 +98,10 @@ Akka使用`Actor层级结构`来描述监督，`父Actor`负责监督`子Actor`�
 ![akka-chatroom](../../resources/chapter04/akka-chatroom.jpg)
 
     NOTICE:
-    要注意的是 preRestart 和 postRestart 只在重启的时候才会被调用。它们默认调用了 preStart 和 postStop，但是调用它们的时候就不再直接调用 preStart 和 postStop 了。这样我们就能够决定，到底是只在 Actor 启动或停止的时候调用一次 preStart 和 postStop，还是每次重启一个 Actor 的时候就调用 preStart 和 postStop。
+    要注意的是 preRestart 和 postRestart 只在重启的时候才会被调用。
+    它们默认调用了 preStart 和 postStop，但是调用它们的时候就不再直接调用 preStart 和 postStop 了。
+    这样我们就能够决定，到底是只在 Actor 启动或停止的时候调用一次 preStart 和 postStop，
+    还是每次重启一个 Actor 的时候就调用 preStart 和 postStop。
 
 ###### 重启和停止时的消息处理
 可以定义监督策略，在抛出异常前重新尝试发送失败的消息，重试次数没有限制。也可以设置时间限制，比如最多重试 10 次或 1 分钟，只要达到其中任一限制就停止重试.
@@ -212,6 +215,7 @@ FSM 中也有状态以及基于状态的行为变化。跟热交换比起来，F
 状态容器就是`存储消息`的地方。FSM 允许我们定义状态容器，并且在切换状态时修改状态容器。
 
 
+##### 4.3.4 通过重启转移状态
 
 
 

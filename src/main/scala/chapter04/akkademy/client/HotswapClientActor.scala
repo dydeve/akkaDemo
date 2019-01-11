@@ -1,8 +1,9 @@
 package chapter04.akkademy.client
 
-import akka.actor.{Actor, ActorLogging, Stash}
-import akka.io.UdpConnected.Disconnected
-import chapter04.akkademy.{Connected, DisConnected, Request}
+import akka.actor.{Actor, ActorIdentity, ActorLogging, Cancellable, Identify, Stash}
+import chapter04.akkademy.{Connected, Request}
+
+import scala.concurrent.duration._
 
 /**
   * @Description:
@@ -15,7 +16,7 @@ class HotswapClientActor(address: String) extends Actor with ActorLogging with S
 
   //离线处理
   override def receive = {
-    case x: Request =>  //can't handle until we know remote system is responding
+    case x: Request => //can't handle until we know remote system is responding
       remoteDb ! new Connected //see if the remote actor is up
       stash() //stash message for later
     case _: Connected => // Okay to start processing messages.
@@ -32,6 +33,8 @@ class HotswapClientActor(address: String) extends Actor with ActorLogging with S
     case x: Request =>
       //本地转发
       remoteDb forward x //forward is used to preserve sender
+    //todo 直接tell应该也行 因为sender作为参数传过去了
+    //remoteDb forward x
   }
 }
 
