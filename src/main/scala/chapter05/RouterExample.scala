@@ -1,6 +1,6 @@
 package chapter05
 
-import akka.actor.{ActorRef, ActorSystem, Props}
+import akka.actor.{ActorRef, ActorSystem, OneForOneStrategy, Props}
 import akka.routing.{Broadcast, RoundRobinGroup, RoundRobinPool}
 import chapter05.akkademy.ArticleParseActor
 
@@ -16,7 +16,9 @@ class RouterExample {
   //create router by Actor Pool
   val workerRouter: ActorRef = system.actorOf(
     Props.create(classOf[ArticleParseActor])
-      .withRouter(new RoundRobinPool(8))
+      .withRouter(new RoundRobinPool(8)
+        .withSupervisorStrategy(new OneForOneStrategy)//监督 Router Pool 中的路由对象
+      )
   )
   //create router by  Actor Group
   val actors = List.empty[ActorRef]

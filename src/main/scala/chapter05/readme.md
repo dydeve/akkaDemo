@@ -45,3 +45,35 @@ router ! akka.routing.Broadcast(msg)
 
 ###### 监督 Router Pool 中的路由对象 
 
+如果使用 Pool 的方式创建 Router，由 Router 负责创建 Actor，那么这些路由对象会 成为 Router 的子节点。创建 Router 时，可以给 Router 提供一个自定义的监督策略。
+
+使用 Group 方法创建 Router 的时候传入了事先已经存在的 Actor，所以没有办 法用 Router 来监督 Group 中的 Actor。
+
+
+#### 5.5 使用 Dispatcher
+
+##### 5.5.1 Dispatcher 解析 
+
+Dispatcher 将如何执行任务与何时运行任务两者解耦。一般来说，Dispatcher 会包含一 些线程，这些线程会负责`调度并运行任务`，比如处理 Actor 的消息以及线程中的 Future 事件。 Dispatcher 是 Akka 能够支持`响应式编程`的关键，是负责完成任务的机制。 
+
+所有 `Actor 或 Future `的工作都是由` Executor/Dispatcher `分配的资源来完成的 .
+
+![akka-dispatcher](../../resources/chapter05/akka-dispatcher.jpg)
+
+```scala
+system.dispatcher //actor system's dispatcher
+system.dispatchers.lookup("my-dispatcher"); //custom dispatcher
+```
+由于我们能够创建并获取这些基于 Executor 的 Dispatcher，因此可以使用它们来定义 `ThreadPool/ForkJoinPool` 来隔离运行任务的环境。
+
+##### 5.5.2 Executor
+
+Dispatcher 基于 Executor，所以在具体介绍 Dispatcher 之前，我们将介绍两种主要的 Executor 类型:`ForkJoinPool` 和 `ThreadPool`。
+
+ThreadPool Executor有一个`工作队列`，队列中包含了要分配给各线程的工作。线程 空闲时就会从队列中认领工作。由于线程资源的创建和销毁开销很大，而 ThreadPool 允许线程的重用，所以就可以`减少创建和销毁线程的次数`，提高效率。
+
+ForkJoinPool Executor 使用一种`分治算法`，递归地将任务分割成更小的子任务，然后 把子任务分配给不同的线程运行。接着再把运行结果组合起来。由于提交的任务不一定都能够被递归地分割成 ForkJoinTask，所以 ForkJoinPool Executor 有一个`工作窃取算法`， 允许空闲的线程“窃取”分配给另一个线程的工作。由于工作可能无法平均分配并完成， 所以工作窃取算法能够`更高效地利用硬件资源`。
+
+ForkJoinPool Executor几乎总是比ThreadPool的Executor效率更高，是我们的默认选择。
+
+
