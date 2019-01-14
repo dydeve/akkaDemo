@@ -1,13 +1,14 @@
 package chapter05
 
 import akka.actor.{ActorSystem, Props}
-import akka.routing.{RoundRobinGroup, RoundRobinPool}
+import akka.routing.{RoundRobinGroup}
 import chapter05.TestHelper.TestCameoActor
 import chapter05.akkademy.{ArticleParseActor, ParseArticle}
 import com.typesafe.config.ConfigFactory
 import org.scalatest.{FlatSpec, Matchers}
 
-import scala.concurrent.Promise
+import scala.concurrent.{Await, Promise}
+import scala.concurrent.duration._
 
 /**
   * @Description:
@@ -30,7 +31,14 @@ class AssignActorsToDispatcherTest extends FlatSpec with Matchers {
 
     //create by group
     val workRouter = system.actorOf(
-      RoundRobinGroup(actors.map(x => x.path.toStringWithoutAddress)).props(),
+      RoundRobinGroup(actors.map(x => {
+        /*
+        println(x.path.toString)
+        println(x.path.toStringWithoutAddress)
+        akka://assignActorToDispatcher/user/$a
+        /user/$a
+        */
+        x.path.toStringWithoutAddress})).props(),
       "workerRouter"
     )
 
@@ -39,11 +47,13 @@ class AssignActorsToDispatcherTest extends FlatSpec with Matchers {
 
     val cameoActor = system.actorOf(Props(new TestCameoActor(p)))
 
-    (0 to 2000).foreach(x => {
+    (0 to 16).foreach(x => {
       workRouter.tell(
         new ParseArticle(TestHelper.file),
         cameoActor
       )
     })
+
+    TestHelper.profile(() => Await.ready(p.future, 20 seconds), "ActorsAssignedToDispatcher")
   }
 }

@@ -1,6 +1,6 @@
 package chapter04.akkademy.client
 
-import akka.actor.{Actor,, ActorLogging, Stash}
+import akka.actor.{Actor, ActorLogging, Stash}
 import chapter04.akkademy.{Connected, Request}
 
 

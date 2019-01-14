@@ -206,6 +206,18 @@ val future: Future[UserProfile] = Future {
     所以不要随随便便地增加更多线程。只有已经对数据库表的查询、表以及分区进行了不断的评估、
     修改以及优化直至最优，才可以开始考虑修改线程池的大小。
 
+##### 5.5.7 用于解析文章的 Dispatcher
+1. [在 Actor 中使用配置好的 Dispatcher](../../../test/scala/chapter05/AssignActorsToDispatcherTest.scala)
+2. [使用 BalancingPool/BalancingDispatcher](../../../test/scala/chapter05/BalancingPoolSpec.scala)
+使用 BalancingPool 时，Pool 中的所有 Actor 会共享同一个邮箱,确保在有工作的时候降低 Actor 的空闲率.这种做法通常都能获得比其他负载均衡策略更高的资源利用率.
+
+BalancingPool 使用了一种特殊的 Dispatcher:`BalancingDispatcher`。在大多数情况下， 我们希望 BalancingDispatcher 中的线程数量和使用的 Actor 数量相等。
+
+在本地工作时，这是一种在所有 Actor 之间平衡负载的绝佳方法。
+
+##### 5.5.8 并行最优化
+要确定硬件上的最优并行度，方法只有一种:测试
+
 
 
 

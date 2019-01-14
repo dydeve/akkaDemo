@@ -20,6 +20,7 @@ class ArticleParseActor extends Actor {
         case article: ParseArticle => parse(article.html)
       }
     case ParseArticle(html) =>
+      //println(self.path.toString)
       parse(html)
     case _ =>
       sender() ! Status.Failure(new IllegalArgumentException)
