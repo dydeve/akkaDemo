@@ -1,9 +1,8 @@
 package chapter04.akkademy.client
 
-import akka.actor.{Actor, ActorIdentity, ActorLogging, Cancellable, Identify, Stash}
+import akka.actor.{Actor,, ActorLogging, Stash}
 import chapter04.akkademy.{Connected, Request}
 
-import scala.concurrent.duration._
 
 /**
   * @Description:

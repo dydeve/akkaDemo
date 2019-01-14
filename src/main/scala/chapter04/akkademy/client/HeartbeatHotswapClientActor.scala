@@ -57,8 +57,8 @@ class HeartbeatHotswapClientActor(
     case _: ActorInitializationException ⇒ Stop
     case _: ActorKilledException         ⇒ Stop
     case _: DeathPactException           ⇒ Stop
-    case _: RemoteDieException           =>
-      log.info("restart for:", _)
+    case o: RemoteDieException           =>
+      log.info("restart for:", o)
       Restart
     case _: Exception                    ⇒ Restart
   }

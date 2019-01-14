@@ -11,8 +11,14 @@ case class ParseArticle(html: String)
 
 class ArticleParseActor extends Actor {
   override def receive: Receive = {
+    /*
+    运行期擦除
     case list: List[ParseArticle] =>
-      list.foreach(article => parse(article.html))
+      list.foreach(article => parse(article.html))*/
+    case x: List[_] =>
+      x.foreach {
+        case article: ParseArticle => parse(article.html)
+      }
     case ParseArticle(html) =>
       parse(html)
     case _ =>
