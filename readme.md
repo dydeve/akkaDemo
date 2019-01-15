@@ -4,3 +4,9 @@
 3. [传递消息](./src/main/scala/chapter03/readme.md)
 4. [Actor的生命周期——处理 状态与错误](./src/main/scala/chapter04/readme.md)
 5. [纵向扩展](./src/main/scala/chapter05/readme.md)
+6. [横向扩展——集群化](./src/main/scala/chapter06/readme.md)
+
+
+
+
+
