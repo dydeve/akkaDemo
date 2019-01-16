@@ -13,6 +13,7 @@ import com.typesafe.config.ConfigFactory
 object Main {
 
   def start(conf: String) = {
+    //akka.tcp://Akkademy@127.0.0.1:2551,2552,2553
     val system = ActorSystem("Akkademy", ConfigFactory.load(conf))
 
     val clusterController = system.actorOf(Props[ClusterController], "clusterController")
@@ -22,11 +23,22 @@ object Main {
     ClusterClientReceptionist(system).registerService(works)
 
   }
+}
 
+object Main0 {
   def main(args: Array[String]): Unit = {
-    start("cluster0.conf")
-    Thread.sleep(3000)
-    start("cluster1conf")
-    start("cluster2.conf")
+    Main.start("cluster0.conf")
+  }
+}
+
+object Main1 {
+  def main(args: Array[String]): Unit = {
+    Main.start("cluster1.conf")
+  }
+}
+
+object Main2 {
+  def main(args: Array[String]): Unit = {
+    Main.start("cluster2.conf")
   }
 }
