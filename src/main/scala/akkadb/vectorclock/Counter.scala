@@ -1,7 +1,7 @@
 package akkadb.vectorclock
 
 /**
-  * thread-safe, no state
+  * thread-safe, val state
   * @Date 上午12:36 2019/1/18
   * @Author: joker
   */
@@ -9,7 +9,15 @@ case class Counter(value: Int) extends AnyVal {
   //def addOne: Counter = this.copy(value = value + 1)
   def addOne: Counter = Counter(value + 1)
 
-  def max(other: Counter) = Counter(math.max(`value`, other.value))
+  //Counter(math.max(`value`, other.value))
+  def max(other: Counter): Counter = {
+    if (value >= other.value) {
+      this
+    } else {
+      other
+    }
+  }
+
 }
 
 object Counter {

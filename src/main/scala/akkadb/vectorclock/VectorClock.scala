@@ -39,7 +39,7 @@ object VectorClock {
       case (None, None) => Counter.zero
     }
 
-    VectorClock(mergedClock + (receiverId -> mergedCounter.addOne))
+    VectorClock(mergedClock + (receiverId -> mergedCounter.addOne))//notice addOne here
   }
 
 }

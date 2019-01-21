@@ -6,6 +6,7 @@
 5. [纵向扩展](./src/main/scala/chapter05/readme.md)
 6. [横向扩展——集群化](./src/main/scala/chapter06/readme.md)
 
+[akkadb 参考 JustinDB](https://github.com/justin-db/JustinDB)
 
 
 
