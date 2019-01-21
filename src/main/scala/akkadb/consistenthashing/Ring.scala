@@ -1,6 +1,5 @@
 package akkadb.consistenthashing
 
-import java.util.Optional
 
 import akkadb.consistenthashing.Ring.RingPartitionId
 
@@ -71,6 +70,14 @@ object Ring {
     } yield (partitionId, NodeId(id))
 
     new Ring(partitions2Nodes.toMap)
+  }
+
+  def a(partitionSize: Int, nodeSize:Int) = {
+    for {
+      id <- 0 until nodeSize
+      partitionId <- id until partitionSize by nodeSize
+    } yield (partitionId, id)
+
   }
 
 }
