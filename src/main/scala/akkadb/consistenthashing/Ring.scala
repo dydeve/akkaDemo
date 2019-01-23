@@ -4,10 +4,17 @@ package akkadb.consistenthashing
 import akkadb.consistenthashing.Ring.RingPartitionId
 
 /**
-  * @Description:
+  * [vnode，realNode]
+  * 虚拟节点的数量不会变，所以 一致性hash 比hash好！，因为vnode的数量不变，增减real node时，"稳定"
+  * num(vnode) >= num(real node) * n + 1
+  * or
+  * num(vnode) >= num(maxExceptedRealNode) * n + 1
+  *
+  * 此算法节点均匀分布，当1节点挂掉，1所有vnode的负载会全部转移到2！
   * @Date 下午3:59 2019/1/21
   * @Author: joker
   */
+@Deprecated
 class Ring(ring: Map[RingPartitionId, NodeId]) {
 
   lazy val size: Int = ring.size
@@ -36,6 +43,8 @@ object Ring {
   case class UpdatedRingWithTakenPartitions(ring: Ring, takeOverDataFrom: List[(RingPartitionId, NodeId)])
     extends AddNodeResult
 
+  //todo removeNode()
+
   def addNode(ring: Ring, nodeId: NodeId): AddNodeResult = {
     if (ring.nodesId.contains(nodeId)) {
       AlreadyExistsNodeId
@@ -54,6 +63,10 @@ object Ring {
         .flatMap { ringPartitionId => //Optional会被 处理 掉
           ring.getNodeId(ringPartitionId).map(nodeId => (ringPartitionId, nodeId))
         }.toList
+      /*val takeOverDataFrom: List[Option[(Int, NodeId)]] = (0 until ring.size by (ring.nodesId.size + 1))
+        .map {ringPartitionId => //Optional会被 处理 掉
+          ring.getNodeId(ringPartitionId).map(nodeId => (ringPartitionId, nodeId))
+        }.toList*/
 
       val updatedRing = takeOverDataFrom.foldLeft(ring) {
         case (acc, (ringPartitionId, _)) => acc.updated(ringPartitionId, nodeId)
@@ -62,6 +75,8 @@ object Ring {
       UpdatedRingWithTakenPartitions(updatedRing, takeOverDataFrom)
     }
   }
+
+  //todo def removeNode
 
   def apply(partitionSize: Int, nodeSize: Int): Ring = {
     val partitions2Nodes = for {

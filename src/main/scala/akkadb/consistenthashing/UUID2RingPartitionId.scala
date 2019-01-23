@@ -12,7 +12,8 @@ import akkadb.consistenthashing.Ring.RingPartitionId
 object UUID2RingPartitionId extends ((UUID, Ring) => Ring.RingPartitionId) {
 
   override def apply(id: UUID, ring: Ring): RingPartitionId = {
-    (id.hashCode() & Integer.MAX_VALUE) % ring.size
+    //(id.hashCode() & Integer.MAX_VALUE) % ring.size
+    Hash.murmur3_128Positive(id.toString) % ring.size
   }
 
 }
