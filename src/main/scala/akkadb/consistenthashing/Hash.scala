@@ -17,7 +17,7 @@ object Hash {
   val mod = Math.pow(2.0, 31)
   val INT_MASK = 0xffffffffL
 
-  val murmur3_128 = Hashing.murmur3_128
+  private val murmur3_128 = Hashing.murmur3_128
 
   def murmur3_128(input: String): Int =
     murmur3_128.hashString(input, Charsets.UTF_8).asInt()
@@ -66,16 +66,18 @@ object Hash {
     val candidate = _jump(0)
     if (checkAlive != null && !checkAlive(candidate)) {
       consistentHash(input + 1, buckets, reHashNum -1, checkAlive)
+    } else {
+      candidate
     }
-    candidate
+    //bug: candidate
   }
-}
 
-case class LinearCongruentialGenerator(seed: Long) {
-  private var state = seed
+  case class LinearCongruentialGenerator(seed: Long) {
+    private var state = seed
 
-  def nextDouble: Double = {
-    state = 2862933555777941757L * state + 1
-    return ((state >>> 33).toInt + 1).toDouble / Hash.mod
+    def nextDouble: Double = {
+      state = 2862933555777941757L * state + 1
+      return ((state >>> 33).toInt + 1).toDouble / Hash.mod
+    }
   }
 }

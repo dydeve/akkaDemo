@@ -5,6 +5,7 @@ import akka.cluster.protobuf.msg.ClusterMessages
 /**
   * akka.cluster.protobuf.msg.ClusterMessages.VectorClock
   *
+  * akka.cluster.VectorClock
   * @Date 上午12:49 2019/1/18
   * @Author: joker
   */

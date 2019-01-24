@@ -12,10 +12,10 @@ package akkadb.consistenthashing
   * @Author: joker
   *
   */
+@Deprecated
 object JumpConsistentHash {
 
   //jumpHash(key: Long, num_buckets: Int): Long jumpHash(2, 100)=-180
-  /*
   def jumpHash(key: Long, num_buckets: Int): Long = {
     var k = key
     var buckets = num_buckets
@@ -33,5 +33,5 @@ object JumpConsistentHash {
     }
 
     b
-  }*/
+  }
 }

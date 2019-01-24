@@ -15,7 +15,7 @@ class ConsistentHashBaseOnTreeMap(nodes: Seq[Node], replicate: Int = 0) {
 
   if (replicate == 0) {
     nodes.foreach { node =>
-      tree.put(murmur3_128(node.x), node)
+      tree.put(murmur3_128(node.id), node)
     }
   } else {
     nodes.foreach { node =>
@@ -27,7 +27,7 @@ class ConsistentHashBaseOnTreeMap(nodes: Seq[Node], replicate: Int = 0) {
 
 
 
-  implicit def nodeHash(node: Node): Int = murmur3_128(node.x)
+  implicit def nodeHash(node: Node): Int = murmur3_128(node.id)
   implicit def stringHash(x: String): Int = murmur3_128(x)
 
   def selectNode(x: String): Node = {
