@@ -2,7 +2,7 @@ package akkadb.storage.mem
 
 import java.util.UUID
 
-import akkadb.storage.api.Data
+import akkadb.storage.api.AkkaDbData
 import akkadb.storage.api.PluggableStorageProtocol.{DataOriginality, StorageGetData}
 import org.scalatest.{FunSpec, Matchers}
 
@@ -15,7 +15,7 @@ import scala.concurrent.duration._
   * @Author: joker
   */
 class InMemStorageSpec extends FunSpec with Matchers {
-  private def prepareData(id: UUID, value: String) = Data(id, value, "", 1L)
+  private def prepareData(id: UUID, value: String) = AkkaDbData(id, value, "", 1L)
   describe("in memory storage") {
 
     it("store single data") {

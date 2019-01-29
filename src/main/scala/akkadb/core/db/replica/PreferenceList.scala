@@ -35,7 +35,7 @@ object PreferenceList {
   }
 
   //private def getNextNodeId(ring: Ring) = ring.nextPartitionId _ andThen ring.getNodeId _
-  private def getNextNodeId(ring: Ring) = ring.nextPartitionId _ andThen ring.getNodeId _
+  private def getNextNodeId(ring: Ring): Ring.RingPartitionId => Option[NodeId] = ring.nextPartitionId _ andThen ring.getNodeId _
 
   sealed trait Error
   case object LackOfCoordinator extends Error

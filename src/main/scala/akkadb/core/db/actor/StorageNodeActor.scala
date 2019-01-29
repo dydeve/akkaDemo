@@ -8,6 +8,7 @@ import akkadb.consistenthashing.{NodeId, Ring}
 import akkadb.core.db.actor.protocol._
 import akkadb.core.db.cluster.ClusterMembers
 import akkadb.core.db.cluster.datacenter.Datacenter
+import akkadb.core.db.replica.N
 import akkadb.storage.api.PluggableStorageProtocol
 
 import scala.concurrent.ExecutionContext

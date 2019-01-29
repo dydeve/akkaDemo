@@ -16,7 +16,7 @@ trait GetStorageProtocol {
 }
 
 trait PutStorageProtocol {
-  def put(data: Data)(resolveOriginality: UUID => DataOriginality): Future[Ack]
+  def put(data: AkkaDbData)(resolveOriginality: UUID => DataOriginality): Future[Ack]
 }
 
 
@@ -28,7 +28,7 @@ object PluggableStorageProtocol {
 
   object StorageGetData {
 
-    case class Single(data: Data) extends StorageGetData
+    case class Single(data: AkkaDbData) extends StorageGetData
 
     case object None extends StorageGetData
 

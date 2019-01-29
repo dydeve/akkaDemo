@@ -3,7 +3,7 @@ package akkadb.storage.mem
 import java.util.UUID
 
 import akkadb.storage.api.PluggableStorageProtocol.{Ack, DataOriginality, StorageGetData}
-import akkadb.storage.api.{Data, PluggableStorageProtocol, RingPartitionId}
+import akkadb.storage.api.{AkkaDbData, PluggableStorageProtocol, RingPartitionId}
 
 import scala.collection.mutable
 import scala.concurrent.Future
@@ -15,12 +15,12 @@ import scala.concurrent.Future
   */
 class InMemStorage extends PluggableStorageProtocol {
 
-  private type MMap = mutable.Map[RingPartitionId, Map[UUID, Data]]
-  private var primaries: MMap = mutable.Map.empty[RingPartitionId, Map[UUID, Data]]
-  private var replicas: MMap = mutable.Map.empty[RingPartitionId, Map[UUID, Data]]
+  private type MMap = mutable.Map[RingPartitionId, Map[UUID, AkkaDbData]]
+  private var primaries: MMap = mutable.Map.empty[RingPartitionId, Map[UUID, AkkaDbData]]
+  private var replicas: MMap = mutable.Map.empty[RingPartitionId, Map[UUID, AkkaDbData]]
 
-  override def put(data: Data)(resolveOriginality: UUID => DataOriginality): Future[Ack] = {
-    def update(mmap: MMap, partitionId: RingPartitionId, data: Data) = {
+  override def put(data: AkkaDbData)(resolveOriginality: UUID => DataOriginality): Future[Ack] = {
+    def update(mmap: MMap, partitionId: RingPartitionId, data: AkkaDbData) = {
       mmap.get(partitionId) match {
         //case Some(partitionMap) => mmap + (partitionId -> (partitionMap ++ Map(data.id -> data)))
         case Some(partitionMap) => mmap + (partitionId -> (partitionMap + (data.id -> data)))

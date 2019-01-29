@@ -7,4 +7,4 @@ import java.util.UUID
   * @Date 下午4:04 2019/1/25
   * @Author: joker
   */
-case class Data(id: UUID, value: String, vclock: Base64, timestamp: Long)
+case class AkkaDbData(id: UUID, value: String, vclock: Base64, timestamp: Long)
