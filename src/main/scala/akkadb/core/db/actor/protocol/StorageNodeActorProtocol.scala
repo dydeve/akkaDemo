@@ -10,7 +10,7 @@ sealed trait StorageNodeReadRequest
 case class StorageNodeLocalRead(id: UUID) extends StorageNodeReadRequest
 
 sealed trait StorageNodeReadResponse
-case class StorageNodeFoundRead(data: AkkaDbData) extends StorageNodeReadResponse
+case class StorageNodeFoundRead(data: Data) extends StorageNodeReadResponse
 case class StorageNodeConflictedRead(conflicts: List[Data]) extends StorageNodeReadResponse
 case class StorageNodeNotFoundRead(id: UUID) extends StorageNodeReadResponse
 case class StorageNodeFailedRead(id: UUID) extends StorageNodeReadResponse

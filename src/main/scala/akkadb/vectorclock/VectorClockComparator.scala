@@ -37,29 +37,29 @@ class VectorClockComparator[Id] extends ((VectorClock[Id], VectorClock[Id]) => V
         }
 
         if (count1 == 0) {
-          Consequent
+          VectorClockRelation.Consequent
         } else if (count2 == 0) {
-          Predecessor
+          VectorClockRelation.Predecessor
         } else {
-          Conflict
+          VectorClockRelation.Conflict
         }
       } else {
         //vc2 > vc1
         if (compare(vc1Keys, vc1, vc2)) {
-          Consequent
+          VectorClockRelation.Consequent
         } else {
-          Conflict
+          VectorClockRelation.Conflict
         }
       }
     } else {
       if (vc1ContainsAllKeysOfVc2) {
         if (compare(vc2Keys, vc2, vc1)) {
-          Predecessor
+          VectorClockRelation.Predecessor
         } else {
-          Conflict
+          VectorClockRelation.Conflict
         }
       } else {
-        Conflict
+        VectorClockRelation.Conflict
       }
     }
 
@@ -69,8 +69,11 @@ class VectorClockComparator[Id] extends ((VectorClock[Id], VectorClock[Id]) => V
 
 sealed trait VectorClockRelation
 
-case object Predecessor extends VectorClockRelation
+object VectorClockRelation {
+  case object Predecessor extends VectorClockRelation
 
-case object Conflict extends VectorClockRelation
+  case object Conflict extends VectorClockRelation
 
-case object Consequent extends VectorClockRelation
+  case object Consequent extends VectorClockRelation
+}
+
